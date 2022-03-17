@@ -30,10 +30,10 @@ authRouter.post('/auth/login',
 
 // ?  routes for resetPassword
 
-authRouter.post('/auth/forgotPassword', authController.ForgotPassword);
+authRouter.post('/auth/forgotPassword', middleware.ValidateemailforPaswwordReset, authController.ForgotPassword);
 
-authRouter.get('/auth/resetPassword/:id/:token', authController.ResetPassword);
-authRouter.post('/auth/resetPassword/:id/:token', authController.ActivatePassword);
+authRouter.get('/auth/activateAccount/:token', authController.ActivatePassword);
+authRouter.post('/auth/resetPassword', authController.ResetPassword);
 
 // authRouter.post('/auth/reset-password', authController.ActivateAcount);
 

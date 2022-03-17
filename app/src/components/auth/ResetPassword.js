@@ -3,27 +3,27 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
-// console.log(query.get('myquery')
+
 
 function ResetPassword() {
 
     //* enable navigation
     // const navigate = useNavigate()
     //* inisilize props
+
+
     const [password, setPassword] = useState('')
     const [ConfirmPassword, setConfirmPassword] = useState('')
     const [errors, setErrors] = useState('')
     const [success, setSucsess] = useState('');
-    // const [token, setToken] = useState('')
-    // const [id, setId] = useState('')
+
     // const {id, token } = useParams()
 
     //* handle reset password and modify it  
     const passwordReset = async (data) => {
         try {
-            const response = await axios.post(`http://localhost:8082/auth/resetPassword/:id/:token`, data);
+            const response = await axios.post(`http://localhost:8082/auth/resetPassword`, data);
             setSucsess(response.data.message);
-            setErrors("")
         } catch (error) {
             console.error('There was an error!', error.response.data.message);
             setErrors(error.response.data.message)
@@ -32,6 +32,7 @@ function ResetPassword() {
     //* handle submit and pass data to resetPassword function
     const handlSubmit = async (event) => {
         event.preventDefault();
+
         const bodyData = {
             password: password,
             ConfirmPassword: ConfirmPassword,
@@ -101,6 +102,7 @@ function ResetPassword() {
                                         </form>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

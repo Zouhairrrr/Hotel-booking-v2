@@ -1,14 +1,11 @@
 const userModel = require('../models/userModel')
-
 const tokenModel = require('../models/tokenModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const dotenv = require('dotenv');
 dotenv.config()
 const sendEmail = require('./services/mail')
-
 //  * create new user with a client default as role 
-
 const CreateNewUser = async (req, res) => {
     const data = req.body;
     //* now we set user password to hashed password
@@ -55,7 +52,6 @@ const Authenticate = async (req, res) => {
 
 
 const ForgotPassword = async (req, res) => {
-
     const email = req.body.email;
     const subject = "Reset Password"
     // * get user email 
@@ -64,29 +60,34 @@ const ForgotPassword = async (req, res) => {
     const secret = process.env.ACCESS_TOKEN_SECRET;
     let payload = {
         id: user._id,
-        email: user.email,
     };
     const token = jwt.sign(payload, secret, { expiresIn: '20m' })
-    const link = `http://localhost:9002/auth/resetPassword/${user.id}/${token}`;
+    const link = `http://localhost:9002/auth/activateAccount/${token}`;
     // console.log(link);
     const text = `<p>This link is valide one time only <a href ="${link}">Reset your Password</a></p>`;
     const data = await sendEmail(email, subject, text);
     if (data) return res.status(200).json({ success: true, message: 'email sent successfully check your email address' })
-
+    return;
 }
 
 
 
 
 
-const ResetPassword = (req, res) => {
-    
+const ResetPassword = async (req, res) => {
+    // const isNotRobot = false;
+    const { token } = req.params;
+    const data = req.body;
+    // if (data.checkme) return setTimeout(() => {
+    //     isNotRobot = true;
+    // }, 2000);
+
+    const user = await userModel.findOneAndUpdate({}, { password: data.password })
     // const token = req.headers["authorization"].split(" ")[2]
     // const id = req.headers["authorization"].split(" ")[1]
     // console.log(id);
-    const { id, token } = req.params
-    console.log(req.params);
-    if (!token)console.log("eeeee") 
+    // console.log(req.params);
+    // if (!token)console.log("eeeee") 
     // return res.status(400).json({ success: false, message: "invalid link or expired" });
     // const secret = process.env.ACCESS_TOKEN_SECRET ;
     // try {
@@ -116,9 +117,25 @@ const ResetPassword = (req, res) => {
 
 }
 
-const ActivatePassword = async (req, res, next) => {
-    const { id, token } = req.params
+const ActivatePassword = async (req, res) => {
 
+    const { token } = req.params
+    if (token) {
+        console.log(token)
+        return;
+        const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        if (!payload) return res.status(401).json({ success: false, message: "invalide token" })
+        const user = await userModel.findOne({ id: payload._id })
+        if (user) return res.status(200).json({ success: true, message: 'redirect ...', token: payload })
+        return res.status(401).json({ success: false, message: 'token invalide' })
+        // const user = userModel.findOne({ _id: token._id })
+        // if (!user) return res.status(401).json({ success: false, message: 'token expired' })
+        // await user.updateOne({ password : })
+
+
+    }
+    // const newPassword = userModel.findOne({ _id: id }).
+    //     console.log(newPassword)
     // const { token } = req.params
     // console.log(req.params)
     // if (!token) return res.status(400).json({ success: false, message: "invalid link or expired" });

@@ -25,6 +25,9 @@ const CreateUser = () => {
         } catch (error) {
             console.error('There was an error!', error.response.data.message);
             setErrors(error.response.data.message)
+            setName("");
+            setEmail("");
+            setPassword("");
         }
     }
     const HandleSumit = async (event) => {

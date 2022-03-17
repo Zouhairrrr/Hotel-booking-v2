@@ -10,6 +10,7 @@ import ForgotPassword from './components/auth/ForgotPassword'
 import ResetPassword from './components/auth/ResetPassword';
 import UserProfile from './components/UserProfile';
 import Home from './components/Home'
+import ActivateAccount from './components/auth/ActivateAccount'
 
 
 function App() {
@@ -21,8 +22,9 @@ function App() {
           <Route exact path="/auth/register" element={<CreateUser />} />
           <Route exact path="/auth/login" element={<LoginUser />} />
           <Route exact path="user/profile" element={<UserProfile />} />
-          <Route exact path="/auth/forgotPassword" element={<ForgotPassword />} />
-          <Route exact path="/auth/resetPassword/:id/:token" element={<ResetPassword />} />
+          <Route exact path="/auth/forgotPassword/" element={<ForgotPassword />} /> /* reset email state/*
+          <Route exact path="/auth/resetPassword" element={<ResetPassword />} />/* reset password_reset/*
+          <Route exact path="/auth/activateAccount/:token" element={<ActivateAccount/>}></Route>
         </Routes>
 
       </Router>

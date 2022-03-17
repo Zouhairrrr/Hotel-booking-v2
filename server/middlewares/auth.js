@@ -41,6 +41,15 @@ const CheckDuplicateUser = async (req, res, next) => {
     next();
     return;
 }
+// const CheckDuplicateEmailForgot = async (req, res, next) => {
+
+//     const { email } = req.body
+//     // if (!name) res.status(401).json({ success: false, message: "Please fill in the name." })
+//     const m = await User.findOne({ email: email })
+//     if (m) return res.status(401).json({ success: false, message: "Email name already exists." })
+//     next();
+//     return;
+// }
 const validateForm = (req, res, next) => {
     const data = req.body;
     if (!(data.email && data.password && data.name)) {
@@ -106,6 +115,7 @@ const ValidateemailforPaswwordReset = (req, res, next) => {
     if (!email) {
         return res.status(401).json({ success: false, message: " email is required" });
     }
+    
     next()
 }
 
