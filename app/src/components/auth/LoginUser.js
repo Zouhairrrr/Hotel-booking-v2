@@ -6,15 +6,17 @@ import axios from 'axios';
 function LoginUser() {
     //* enable navigation
     const navigate = useNavigate()
+
     //* inisilize props
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     // const [remeberme, setremeberme] = useState(false)
     const [errors, setErrors] = useState('')
     const [success, setSucsess] = useState('');
-    // const [token, setToken] = useState('');
 
     //* handle login 
+    
     const VerifyUserLogin = async (data) => {
         try {
             const response = await axios.post(`http://localhost:8082/auth/login`, data)

@@ -22,7 +22,6 @@ const CreateNewUser = async (req, res) => {
 }
 
 const Authenticate = async (req, res) => {
-
     try {
         const bodyData = req.body;
         const user = await userModel.findOne({ email: bodyData.email })
@@ -49,8 +48,6 @@ const Authenticate = async (req, res) => {
     }
 };
 
-
-
 const ForgotPassword = async (req, res) => {
     const email = req.body.email;
     const subject = "Reset Password"
@@ -67,7 +64,6 @@ const ForgotPassword = async (req, res) => {
     const text = `<p>This link is valide one time only <a href ="${link}">Reset your Password</a></p>`;
     const data = await sendEmail(email, subject, text);
     if (data) return res.status(200).json({ success: true, message: 'email sent successfully check your email address' })
-    return;
 }
 
 
@@ -117,37 +113,31 @@ const ResetPassword = async (req, res) => {
 
 }
 
+
 const ActivatePassword = async (req, res) => {
 
     const { token } = req.params
     if (token) {
-        console.log(token)
-        return;
         const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         if (!payload) return res.status(401).json({ success: false, message: "invalide token" })
         const user = await userModel.findOne({ id: payload._id })
-        if (user) return res.status(200).json({ success: true, message: 'redirect ...', token: payload })
-        return res.status(401).json({ success: false, message: 'token invalide' })
-        // const user = userModel.findOne({ _id: token._id })
-        // if (!user) return res.status(401).json({ success: false, message: 'token expired' })
-        // await user.updateOne({ password : })
-
-
+        if (!user) return res.status(401).json({ success: false, message: 'token invalide' })
+        return res.status(200).json({ success: true, message: 'redirect ...', data: payload })
     }
-    // const newPassword = userModel.findOne({ _id: id }).
-    //     console.log(newPassword)
-    // const { token } = req.params
-    // console.log(req.params)
-    // if (!token) return res.status(400).json({ success: false, message: "invalid link or expired" });
-    // const secret = process.env.ACCESS_TOKEN_SECRET;
-    // try {
-    //     const data = jwt.verify(token, secret)
-    //     if (data) return res.stauts(200).json({ success: true, message: "adadadada" })
-    // } catch (error) {
-    //     console.log(error.message);
-    //     res.status(401).json({ success: false, message: "invialide token" });
     // }
 }
+// const newPassword = userModel.findOne({ _id: id }).
+//     console.log(newPassword)
+// const { token } = req.params
+// console.log(req.params)
+// if (!token) return res.status(400).json({ success: false, message: "invalid link or expired" });
+// const secret = process.env.ACCESS_TOKEN_SECRET;
+// try {
+//     const data = jwt.verify(token, secret)
+//     if (data) return res.stauts(200).json({ success: true, message: "adadadada" })
+// } catch (error) {
+//     console.log(error.message);
+//     res.status(401).json({ success: false, message: "invialide token" });
 
 
 module.exports = { CreateNewUser, Authenticate, ForgotPassword, ResetPassword, ActivatePassword };

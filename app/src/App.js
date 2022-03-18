@@ -14,6 +14,7 @@ import ActivateAccount from './components/auth/ActivateAccount'
 
 
 function App() {
+  console.log("object");
   return (
     <>
       <Router>
@@ -21,12 +22,11 @@ function App() {
           <Route exact path="/" element={<Home />}></Route>
           <Route exact path="/auth/register" element={<CreateUser />} />
           <Route exact path="/auth/login" element={<LoginUser />} />
-          <Route exact path="user/profile" element={<UserProfile />} />
-          <Route exact path="/auth/forgotPassword/" element={<ForgotPassword />} /> /* reset email state/*
-          <Route exact path="/auth/resetPassword" element={<ResetPassword />} />/* reset password_reset/*
-          <Route exact path="/auth/activateAccount/:token" element={<ActivateAccount/>}></Route>
+          <Route exact path="/user/profile" element={<UserProfile />} />
+          <Route exact path="/auth/forgotPassword/" element={<ForgotPassword />} /> 
+          <Route exact path="/auth/resetPassword" element={<ResetPassword />} />
+          <Route exact path="/auth/activateAccount/:token" element={<ActivateAccount />}/>
         </Routes>
-
       </Router>
     </>
   );

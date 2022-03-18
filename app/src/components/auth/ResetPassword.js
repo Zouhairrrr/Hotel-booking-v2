@@ -3,22 +3,15 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
-
-
 function ResetPassword() {
-
     //* enable navigation
     // const navigate = useNavigate()
     //* inisilize props
-
-
     const [password, setPassword] = useState('')
     const [ConfirmPassword, setConfirmPassword] = useState('')
     const [errors, setErrors] = useState('')
     const [success, setSucsess] = useState('');
-
     // const {id, token } = useParams()
-
     //* handle reset password and modify it  
     const passwordReset = async (data) => {
         try {
