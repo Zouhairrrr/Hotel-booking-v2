@@ -14,7 +14,7 @@ import ActivateAccount from './components/auth/ActivateAccount'
 
 
 function App() {
-  console.log("object");
+
   return (
     <>
       <Router>

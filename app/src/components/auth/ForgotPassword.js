@@ -21,8 +21,6 @@ function ForgotPassword() {
             const response = await axios.post(`http://localhost:8082/auth/ForgotPassword`, data)
             setSucsess(response.data.message);
             setErrors("")
-
-            // setTimeout(() => navigate('/auth/login'), 2000);
         } catch (error) {
             console.error('There was an error!', error.response.data.message);
             setErrors(error.response.data.message)
@@ -78,7 +76,7 @@ function ForgotPassword() {
                                         </div>
                                         <form method="post" onSubmit={handlSubmit}>
                                             {errors && <span className="badge badge-pill badge-warning text-uppercase">{errors}</span>}
-                                            { success && <span className="badge badge-pill badge-success text-uppercase">{success}</span>   }
+                                            {success && <span className="badge badge-pill badge-success text-uppercase">{success}</span>}
                                             <div className="form-group mb-3">
                                                 <div className="input-group input-group-alternative">
                                                     <div className="input-group-prepend">

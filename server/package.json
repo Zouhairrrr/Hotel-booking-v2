@@ -18,7 +18,7 @@
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
     "express-route-grouping": "^1.1.1",
-    "googleapis": "^95.0.0",
+    "googleapis": "^97.0.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.6",

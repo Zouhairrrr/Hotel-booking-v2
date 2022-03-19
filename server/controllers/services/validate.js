@@ -1,6 +1,8 @@
 const joi = require("joi");
 
-const createValidation = (data) => {
+const createValidation = (req, res, next) => {
+    const { email, password, name } = req.body;
+
     const schema = joi.object({
         name: joi.string().required().min(6),
         email: joi.string().required().email(),
@@ -8,7 +10,6 @@ const createValidation = (data) => {
     });
     return schema.validate(data);
 };
-
 const updateValidation = (data) => {
     const schema = joi.object({
         name: joi.string().required().min(6),
