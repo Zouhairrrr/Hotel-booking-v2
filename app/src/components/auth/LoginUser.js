@@ -23,7 +23,6 @@ function LoginUser() {
             setSucsess(response.data.message);
             setErrors("")
             console.log(response.data.data.token)
-            // setToken(da)
             setTimeout(() => navigate('/user/profile'), 2000);
         } catch (error) {
             console.error('There was an error!', error.response.data.message);

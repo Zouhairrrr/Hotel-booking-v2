@@ -52,28 +52,35 @@ const Authenticate = async (req, res) => {
     }
 };
 
+
 const ForgotPassword = async (req, res) => {
     const email = req.body.email;
     const subject = "Reset Password"
-    // * get user email 
-    const user = await userModel.findOne({ email: email })
-    if (!user) return res.status(401).json({ success: false, message: "user does not exist" })
-    const secret = process.env.ACCESS_TOKEN_SECRET;
-    let payload = {
-        id: user._id,
-    };
-    const token = jwt.sign(payload, secret, { expiresIn: '20m' })
-    const link = `http://localhost:9002/auth/activateAccount/${token}`;
-    console.log(link);
-    const text = `<p>This link is valide one time only <a href ="${link}">Reset your Password</a></p>`;
-    const data = await SendEmail(subject, text);
-    if (data) return res.status(200).json({ success: true, message: 'email sent successfully check your email address' })
+    try {
+        const user = await userModel.findOne({ email: email })
+        if (!user) return res.status(401).json({ success: false, message: "user does not exist" })
+        // * get user email 
+        const secret = process.env.ACCESS_TOKEN_SECRET;
+        let payload = {
+            id: user._id,
+        };
+        const token = jwt.sign(payload, secret, { expiresIn: '10m' })
+        const link = `http://localhost:9002/auth/activateAccount/${token}`;
+        console.log(link);
+        const text = `<p>This link is valide one time only <a href ="${link}">Reset your Password</a></p>`;
+        const data = await SendEmail(process.env.EMAIL, subject, text);
+        if (data) return res.status(200).json({ success: true, message: 'email sent successfully check your email address' })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message })
+    }
 }
 
 const ResetPassword = async (req, res) => {
 
 
-    
+    const data = req.body;
+    const user = await userModel.find({ id: data._id });
+
     // const token = req.headers["authorization"].split(" ")[2]
     // const id = req.headers["authorization"].split(" ")[1]
     // console.log(id);
@@ -107,8 +114,6 @@ const ResetPassword = async (req, res) => {
     // });
 
 }
-
-
 const ActivatePassword = async (req, res) => {
     const { token } = req.params;
     const jwtExpirySeconds = 300
@@ -124,11 +129,11 @@ const ActivatePassword = async (req, res) => {
         return res.status(200).json({ success: true, message: 'redirect ...', data: user })
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
-            // if the error thrown is because the JWT is unauthorized, return a 401 error
+
+            //* if the error thrown is because the JWT is unauthorized, return a 401 error
             return res.status(401).json({ success: false, message: "Invalid token please try again" });
         }
     }
 }
-
 
 module.exports = { CreateNewUser, Authenticate, ForgotPassword, ResetPassword, ActivatePassword };

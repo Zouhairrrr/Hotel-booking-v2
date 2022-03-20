@@ -23,13 +23,13 @@ const SendEmail = async (email, subject, text) => {
             },
         });
         const messageOptions = {
+            from: process.env.EMAIL,
             subject: subject,
             text: text,
             to: email,
-            from: process.env.EMAIL,
-          };
-        console.log("eeeeeeeee" , result);
-        return transporter.sendMail(messageOptions);
+        };
+
+        return await transporter.sendMail(messageOptions);
     } catch (error) {
         return error;
     }

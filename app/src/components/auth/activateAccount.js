@@ -8,6 +8,7 @@ function ActivateAccount() {
     const [success, setSuccess] = useState("");
     const [errors, setErrors] = useState("");
 
+
     useEffect(() => {
         const activate = () => {
             axios.get(`http://localhost:8082/auth/activateAccount/${token}`)
@@ -32,11 +33,9 @@ function ActivateAccount() {
         <>
             <div className="container">
                 {errors && <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <span class="alert-inner--icon"><i class="ni ni-bell-55"></i></span>
                     <span class="alert-inner--text"><strong>Warning!</strong> {errors}!</span>
-                </div>}
+                </div>} 
                 {success && <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <span class="alert-inner--icon"><i class="ni ni-like-2"></i></span>
                     <span class="alert-inner--text"><strong>Success!</strong> {success} ! </span>
                 </div>}
             </div>

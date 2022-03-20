@@ -16,16 +16,13 @@ app.use(session({
     keys: ['key1', 'key2'],
     cookie: {
         name: 'session',
-        secure: true,
-        httpOnly: true,
-        domain: 'http://localhost:8082',
-        //! path: 'foo/bar',
-        expires: expiryDate
+        keys: 'secret key',
+        maxAge: 24 * 60 * 60 * 1000 //24H
     }
 }))
 
 const corsOptions = {
-    origin: "http://localhost:9002",
+    origin: 'http://localhost:9002',
     optionsSuccessStatus: 200,
     withCredentials: true
 };
