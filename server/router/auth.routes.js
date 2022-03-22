@@ -37,9 +37,15 @@ authRouter.post('/auth/forgotPassword',
     authController.ForgotPassword);
 
 authRouter.get('/auth/activateAccount/:token', authController.ActivatePassword);
-authRouter.post('/auth/resetPassword', authController.ResetPassword);
 
-// authRouter.post('/auth/reset-password', authController.ActivateAcount);
+
+authRouter.post('/auth/resetPassword',
+    [
+        middleware.PasswordValidate,
+        middleware.ConfirmPassword,
+
+    ]
+    , authController.ResetPassword);
 
 
 module.exports = authRouter;

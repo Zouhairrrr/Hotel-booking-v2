@@ -3,27 +3,29 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function ActivateAccount() {
+
     const navigate = useNavigate();
     const { token } = useParams()
     const [success, setSuccess] = useState("");
     const [errors, setErrors] = useState("");
-
+    const [userId, setUserId] = useState('');
 
     useEffect(() => {
         const activate = () => {
             axios.get(`http://localhost:8082/auth/activateAccount/${token}`)
                 .then((response) => {
-                    const user = response.data.message
-                    setSuccess(user);
+                    const msgSuccess = response.data.message
+                    setSuccess(msgSuccess);
+                    setUserId(response.data.data._id)
                     if (!response.data.success) {
                         navigate('/auth/ForgotPassword')
                         return
                     }
-                    setTimeout(() => { navigate('/auth/resetPassword') }, 2000)
+                    setTimeout(() => { navigate('/auth/resetPassword', { state: userId }) }, 2000)
                 })
                 .catch((error) => {
-                    const user = error.response.data.message
-                    setErrors(user);
+                    const msgerror = error.response.data.message
+                    setErrors(msgerror);
                     setTimeout(() => { navigate('/') }, 2000)
                 })
         }
@@ -32,11 +34,12 @@ function ActivateAccount() {
     return (
         <>
             <div className="container">
-                {errors && <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <span class="alert-inner--text"><strong>Warning!</strong> {errors}!</span>
-                </div>} 
-                {success && <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <span class="alert-inner--text"><strong>Success!</strong> {success} ! </span>
+                {errors && <div className="alert alert-warning alert-dismissible fade show" role="alert">
+                    <span className="alert-inner--text"><strong>Warning!</strong> {errors}!</span>
+                </div>}
+
+                {success && <div className="alert alert-success alert-dismissible fade show" role="alert">
+                    <span className="alert-inner--text"><strong>Success!</strong> {success} ! </span>
                 </div>}
             </div>
         </>

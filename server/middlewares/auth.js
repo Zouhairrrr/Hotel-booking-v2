@@ -115,10 +115,36 @@ const ValidateemailforPaswwordReset = (req, res, next) => {
     if (!email) {
         return res.status(401).json({ success: false, message: " email is required" });
     }
-    
+
     next()
 }
 
+
+
+
+const PasswordValidate = (req, res, next) => {
+
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+    if (!password || !confirmPassword) return res.status(401).json({ success: false, message: "Please enter your password" });
+    next();
+}
+
+
+
+const ConfirmPassword = (req, res, next) => {
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+    if (password !== confirmPassword) return res.status(401).json({ success: false, message: "Password dosn't match" });
+    const noSpecialCharacters = password.replace(/[^a-zA-Z0-9 ]/g, '');
+    //! console.log(noSpecialCharacters);
+    if (noSpecialCharacters.length < 8) {
+        return res.status(401).json({ success: false, message: "please enter a password higher than 8 characters" })
+    } else if (noSpecialCharacters.length > 20) {
+        return res.status(401).json({ success: false, message: "please enter a password less than 20 characters" })
+    }
+    return next();
+}
 
 module.exports = {
     VerifyJwt,
@@ -131,6 +157,8 @@ module.exports = {
     validateForm,
     validateFormLogin,
     ValidateemailforPaswwordReset,
+    PasswordValidate,
+    ConfirmPassword
 };
 
 

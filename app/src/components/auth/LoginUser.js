@@ -27,7 +27,6 @@ function LoginUser() {
         } catch (error) {
             console.error('There was an error!', error.response.data.message);
             setErrors(error.response.data.message)
-            setEmail("");
             setPassword("");
         }
     }
