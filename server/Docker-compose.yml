@@ -1,0 +1,18 @@
+version:  '3.7'
+
+services:
+  db-setup:
+    image : mongo
+    container_name: dbmongo
+    ports: 
+      - "27017:27017"
+
+Api:
+  auth:
+    image: auth
+    container_name: authentication
+    ports: '5000'
+    
+    
+
+    

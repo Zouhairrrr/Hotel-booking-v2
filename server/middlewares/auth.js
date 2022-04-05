@@ -146,6 +146,21 @@ const ConfirmPassword = (req, res, next) => {
     return next();
 }
 
+
+
+
+
+
+
+// Authentication and Authorization Middleware
+const auth = (req, res, next) => {
+    const session = req.session;
+    if (!session) return res.status(401).json({ success: false, message: "not allowed to access please login" });
+    session.userid = req.body.username;
+    console.log(req.session)
+};
+
+
 module.exports = {
     VerifyJwt,
     CheckDuplicateUser,
@@ -158,7 +173,8 @@ module.exports = {
     validateFormLogin,
     ValidateemailforPaswwordReset,
     PasswordValidate,
-    ConfirmPassword
+    ConfirmPassword,
+    auth
 };
 
 

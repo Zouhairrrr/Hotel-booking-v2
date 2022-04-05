@@ -11,7 +11,6 @@ function LoginUser() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    // const [remeberme, setremeberme] = useState(false)
     const [errors, setErrors] = useState('')
     const [success, setSucsess] = useState('');
 
@@ -19,16 +18,20 @@ function LoginUser() {
     
     const VerifyUserLogin = async (data) => {
         try {
+
             const response = await axios.post(`http://localhost:8082/auth/login`, data)
             setSucsess(response.data.message);
             setErrors("")
             console.log(response.data.data.token)
             setTimeout(() => navigate('/user/profile'), 2000);
+
         } catch (error) {
+
             console.error('There was an error!', error.response.data.message);
             setErrors(error.response.data.message)
             setPassword("");
         }
+
     }
     //* handle submit and pass data to VerifyUserLogin function
     const handlSubmit = async (event) => {

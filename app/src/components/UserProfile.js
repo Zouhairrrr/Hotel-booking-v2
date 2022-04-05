@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 function UserProfile() {
 
+    
 
     // try {
     //     const response = await axios.post(`http://localhost:8082/auth/register`, data)

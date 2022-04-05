@@ -4,11 +4,11 @@ import axios from 'axios';
 
 function ActivateAccount() {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const { token } = useParams()
     const [success, setSuccess] = useState("");
     const [errors, setErrors] = useState("");
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState("");
 
     useEffect(() => {
         const activate = () => {
@@ -17,20 +17,22 @@ function ActivateAccount() {
                     const msgSuccess = response.data.message
                     setSuccess(msgSuccess);
                     setUserId(response.data.data._id)
+                    console.log(response.data.data._id);
                     if (!response.data.success) {
                         navigate('/auth/ForgotPassword')
                         return
                     }
-                    setTimeout(() => { navigate('/auth/resetPassword', { state: userId }) }, 2000)
+                    setTimeout(() => { navigate('/auth/resetPassword', { state: setUserId() }) }, 2000)
                 })
                 .catch((error) => {
                     const msgerror = error.response.data.message
                     setErrors(msgerror);
                     setTimeout(() => { navigate('/') }, 2000)
+                    setUserId("");
                 })
         }
         activate()
-    })
+    }, [])
     return (
         <>
             <div className="container">

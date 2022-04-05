@@ -1,25 +1,22 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require("cors");
-const session = require('cookie-session')
-const dotenv = require('dotenv');
+const session = require('express-session')
+const cookieParser = require('cookie-parser');
+require('dotenv').config()
 const authRoute = require('./router/auth.routes')
+
 const PORT = process.env.PORT || 8082;
 const app = express();
-dotenv.config()
 
 
-
-const expiryDate = new Date(Date.now() + 60 * 60 * 1000) //! 1 hour
+const oneDay = 1000 * 60 * 60 * 24;
 app.use(session({
-    name: 'session',
-    keys: ['key1', 'key2'],
-    cookie: {
-        name: 'session',
-        keys: 'secret key',
-        maxAge: 24 * 60 * 60 * 1000 //24H
-    }
-}))
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: true,
+    cookie: { maxAge: oneDay },
+    resave: false
+}));
 
 const corsOptions = {
     origin: 'http://localhost:9002',
@@ -29,7 +26,7 @@ const corsOptions = {
 app.use(cors({ origin: corsOptions }));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser());
 
 
 // * General route

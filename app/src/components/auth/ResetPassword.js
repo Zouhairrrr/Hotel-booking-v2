@@ -15,7 +15,7 @@ function ResetPassword() {
     const navigate = useNavigate()
 
     //! to pass props between components
-    const location = useLocation()
+    const  state  = useLocation()
 
     //* inisilize props
     const [password, setPassword] = useState('')
@@ -27,31 +27,33 @@ function ResetPassword() {
     //* handle reset password and modify it  
 
     const passwordReset = async (data) => {
+
         try {
-            const response = await api.post(`/auth/resetPassword`, data)
-            setSucsess(response.data.message);
+            const response = await api.post(`auth/resetPassword`, data)
+            setSucsess(response.data.data.message);
             setErrors("")
             setPassword("");
             setConfirmPassword("");
-            setTimeout(() => { navigate('auth/login') } , 2000)
+            setTimeout(() => { navigate('auth/login') }, 2000)
         } catch (error) {
             console.error('There was an error!', error.response.statusText);
             setErrors(error.response.data.message)
             setPassword("");
             setConfirmPassword("");
+            setSucsess("");
+
         }
     }
     //* handle submit and pass data to resetPassword function
     const handlSubmit = async (event) => {
         event.preventDefault();
         const bodyData = {
-            id: location.state,
+            id: state.state,
             password: password,
             confirmPassword: ConfirmPassword,
         }
         await passwordReset(bodyData)
     }
-
     return (
         <>
             <section className="section section-lg section-shaped overflow-hidden my-0">

@@ -37,8 +37,9 @@ const Authenticate = async (req, res) => {
                 process.env.ACCESS_TOKEN_SECRET, {
                 algorithm: "HS256",
                 expiresIn: jwtExpirySeconds,
-            }
-            )
+            })
+
+
             return res.status(200).json({ success: true, message: "Login succeeded", data: { token } });
         } else {
             return res.status(401).json({
@@ -46,6 +47,8 @@ const Authenticate = async (req, res) => {
                 message: "Password dosen't match",
             })
         }
+
+
     } catch (error) {
         console.log('ERROR => ' + error);
         return res.status(500).json(error);
@@ -59,11 +62,13 @@ const ForgotPassword = async (req, res) => {
     try {
         const user = await userModel.findOne({ email: email })
         if (!user) return res.status(401).json({ success: false, message: "user does not exist" })
+        console.log(user._id);
         // * get user email 
         const secret = process.env.ACCESS_TOKEN_SECRET;
         let payload = {
             id: user._id,
-        };
+            email: user.email,
+        }
         const token = jwt.sign(payload, secret, { expiresIn: '10m' })
         const link = `http://localhost:9002/auth/activateAccount/${token}`;
         console.log(link);
@@ -76,9 +81,11 @@ const ForgotPassword = async (req, res) => {
 }
 
 const ResetPassword = async (req, res) => {
-
-    const data = req.body;
-    const user = await userModel.findOneAndUpdate({ id: data._id }, { password: data.password }, { new: true });
+    const { password, id } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const newPassword = await bcrypt.hash(password, salt);
+    const user = await userModel.findOneAndUpdate({ id: id }, { password: newPassword }, { new: true });
+    console.log('kkkk', id);
     if (!user) return res.status(403).json({ success: false, message: 'something went wrong trying to reset password try again' });
     return res.status(200).json({ success: true, message: 'password updated successfully ^_^' });
 
@@ -87,20 +94,19 @@ const ResetPassword = async (req, res) => {
 
 const ActivatePassword = async (req, res) => {
     const { token } = req.params;
-    const jwtExpirySeconds = 300
-    if (!token) {
-        return res.status(401).json({ success: false, message: "Token is not Provided" })
-    }
     try {
+        const jwtExpirySeconds = 300
         const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, {
             algorithm: "HS256",
             expiresIn: jwtExpirySeconds,
         })
+
         const user = await userModel.findOne({ id: payload._id })
-        return res.status(200).json({ success: true, message: 'redirect ...', data: user })
+        if (!user) return res.status(401).json({ success: false, message: 'user dosent exist' })
+        // console.log(user);
+        return res.status(200).json({ success: true, message: 'working on it ... Redirect ...', data: user })
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
-
             //* if the error thrown is because the JWT is unauthorized, return a 401 error
             return res.status(401).json({ success: false, message: "Invalid token please try again" });
         }
